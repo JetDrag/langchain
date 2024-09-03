@@ -427,6 +427,8 @@ class ChildTool(BaseTool):
                     for k, v in result.dict().items()
                     if k in tool_input
                 }
+            # make sure tool input keys won't be modified during following process
+            tool_input.copy()
             return tool_input
 
     @root_validator(pre=True)
