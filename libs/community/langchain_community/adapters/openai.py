@@ -30,7 +30,7 @@ from typing_extensions import Literal
 
 
 async def aenumerate(
-    iterable: AsyncIterator[Any], start: int = 0
+        iterable: AsyncIterator[Any], start: int = 0
 ) -> AsyncIterator[tuple[int, Any]]:
     """Async version of enumerate function."""
     i = start
@@ -180,6 +180,12 @@ def _convert_message_chunk(chunk: BaseMessageChunk, i: int) -> dict:
             # not missing, but None.
             if i == 0:
                 _dict["content"] = None
+        if "tool_calls" in chunk.additional_kwargs:
+            _dict["tool_calls"] = chunk.additional_kwargs["tool_calls"]
+            # If the first chunk is tool calls, the content is not empty string,
+            # not missing, but None.
+            if i == 0:
+                _dict["content"] = None
         else:
             _dict["content"] = chunk.content
     else:
@@ -201,30 +207,32 @@ class ChatCompletion:
     @overload
     @staticmethod
     def create(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: Literal[False] = False,
-        **kwargs: Any,
-    ) -> dict: ...
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: Literal[False] = False,
+            **kwargs: Any,
+    ) -> dict:
+        ...
 
     @overload
     @staticmethod
     def create(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: Literal[True],
-        **kwargs: Any,
-    ) -> Iterable: ...
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: Literal[True],
+            **kwargs: Any,
+    ) -> Iterable:
+        ...
 
     @staticmethod
     def create(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: bool = False,
-        **kwargs: Any,
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: bool = False,
+            **kwargs: Any,
     ) -> Union[dict, Iterable]:
         models = importlib.import_module("langchain.chat_models")
         model_cls = getattr(models, provider)
@@ -242,30 +250,32 @@ class ChatCompletion:
     @overload
     @staticmethod
     async def acreate(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: Literal[False] = False,
-        **kwargs: Any,
-    ) -> dict: ...
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: Literal[False] = False,
+            **kwargs: Any,
+    ) -> dict:
+        ...
 
     @overload
     @staticmethod
     async def acreate(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: Literal[True],
-        **kwargs: Any,
-    ) -> AsyncIterator: ...
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: Literal[True],
+            **kwargs: Any,
+    ) -> AsyncIterator:
+        ...
 
     @staticmethod
     async def acreate(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: bool = False,
-        **kwargs: Any,
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: bool = False,
+            **kwargs: Any,
     ) -> Union[dict, AsyncIterator]:
         models = importlib.import_module("langchain.chat_models")
         model_cls = getattr(models, provider)
@@ -287,7 +297,7 @@ def _has_assistant_message(session: ChatSession) -> bool:
 
 
 def convert_messages_for_finetuning(
-    sessions: Iterable[ChatSession],
+        sessions: Iterable[ChatSession],
 ) -> List[List[dict]]:
     """Convert messages to a list of lists of dictionaries for fine-tuning.
 
@@ -310,30 +320,32 @@ class Completions:
     @overload
     @staticmethod
     def create(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: Literal[False] = False,
-        **kwargs: Any,
-    ) -> ChatCompletions: ...
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: Literal[False] = False,
+            **kwargs: Any,
+    ) -> ChatCompletions:
+        ...
 
     @overload
     @staticmethod
     def create(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: Literal[True],
-        **kwargs: Any,
-    ) -> Iterable: ...
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: Literal[True],
+            **kwargs: Any,
+    ) -> Iterable:
+        ...
 
     @staticmethod
     def create(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: bool = False,
-        **kwargs: Any,
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: bool = False,
+            **kwargs: Any,
     ) -> Union[ChatCompletions, Iterable]:
         models = importlib.import_module("langchain.chat_models")
         model_cls = getattr(models, provider)
@@ -355,30 +367,32 @@ class Completions:
     @overload
     @staticmethod
     async def acreate(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: Literal[False] = False,
-        **kwargs: Any,
-    ) -> ChatCompletions: ...
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: Literal[False] = False,
+            **kwargs: Any,
+    ) -> ChatCompletions:
+        ...
 
     @overload
     @staticmethod
     async def acreate(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: Literal[True],
-        **kwargs: Any,
-    ) -> AsyncIterator: ...
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: Literal[True],
+            **kwargs: Any,
+    ) -> AsyncIterator:
+        ...
 
     @staticmethod
     async def acreate(
-        messages: Sequence[Dict[str, Any]],
-        *,
-        provider: str = "ChatOpenAI",
-        stream: bool = False,
-        **kwargs: Any,
+            messages: Sequence[Dict[str, Any]],
+            *,
+            provider: str = "ChatOpenAI",
+            stream: bool = False,
+            **kwargs: Any,
     ) -> Union[ChatCompletions, AsyncIterator]:
         models = importlib.import_module("langchain.chat_models")
         model_cls = getattr(models, provider)
